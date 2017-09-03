@@ -9,4 +9,5 @@ async def print_page(url):
 
 
 loop = asyncio.get_event_loop()
-loop.run_until_complete(print_page('http://example.com'))
+loop.run_until_complete(asyncio.wait([print_page('http://example.com/foo'),
+                                      print_page('http://example.com/bar')]))
