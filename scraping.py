@@ -17,11 +17,14 @@ def first_magnet(page):
 
 async def print_magnet(query):
     url = 'http://thepiratebay.se/search/{}/0/7/0'.format(query)
-    page = await get(url, compress=True)
+    with await sem:
+        page = await get(url, compress=True)
     magnet = first_magnet(page)
     print('{}: {}'.format(query, magnet))
 
-distros = ['archlinux', 'ubuntu', 'debian']
+distros = ['archlinux', 'ubuntu', 'debian', 'manjaro', 'suse', 'elementary',
+           'fedora', 'gentoo']
+sem = asyncio.Semaphore(5)
 loop = asyncio.get_event_loop()
 f = asyncio.wait([print_magnet(d) for d in distros])
 loop.run_until_complete(f)
